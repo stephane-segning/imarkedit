@@ -1,0 +1,61 @@
+{
+  "name": "imarkedit-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/imarkedit-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/webpack:webpack",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/imarkedit-api",
+        "main": "apps/imarkedit-api/src/main.ts",
+        "tsConfig": "apps/imarkedit-api/tsconfig.app.json",
+        "assets": [
+          "apps/imarkedit-api/src/assets"
+        ],
+        "webpackConfig": "apps/imarkedit-api/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "imarkedit-api:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "imarkedit-api:build:development"
+        },
+        "production": {
+          "buildTarget": "imarkedit-api:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
+      "options": {
+        "jestConfig": "apps/imarkedit-api/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
