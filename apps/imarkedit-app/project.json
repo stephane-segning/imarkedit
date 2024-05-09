@@ -1,0 +1,126 @@
+{
+  "name": "imarkedit-app",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/imarkedit-app/src",
+  "projectType": "application",
+  "targets": {
+    "build:browser-extension": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/imarkedit-app/browser_extension"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development-browser_extension"
+        },
+        "production": {
+          "mode": "production-browser_extension"
+        }
+      }
+    },
+    "build:capacitor": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/imarkedit-app/capacitor"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development-capacitor"
+        },
+        "production": {
+          "mode": "production-capacitor"
+        }
+      }
+    },
+    "build:electron": {
+      "executor": "nx:run-commands",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "cwd": "apps/imarkedit-app",
+        "command": "{args.ca} --mode={args.mode} --config electron.vite.config.ts --outDir=../../dist/apps/imarkedit-app/electron",
+        "outputPath": "dist/apps/imarkedit-app/electron"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development-electron",
+          "ca": "electron-vite"
+        },
+        "production": {
+          "mode": "production-electron",
+          "ca": "electron-vite build"
+        }
+      }
+    },
+    "build:web": {
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "outputPath": "dist/apps/imarkedit-app/web"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development-web"
+        },
+        "production": {
+          "mode": "production-web"
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/vite:dev-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "imarkedit-app:build:web"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "imarkedit-app:build:web:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "imarkedit-app:build:web:production",
+          "hmr": false
+        }
+      }
+    },
+    "preview": {
+      "executor": "@nx/vite:preview-server",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "imarkedit-app:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "imarkedit-app:build:development"
+        },
+        "production": {
+          "buildTarget": "imarkedit-app:build:production"
+        }
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/apps/imarkedit-app"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "imarkedit-app:build"
+      }
+    }
+  },
+  "tags": []
+}

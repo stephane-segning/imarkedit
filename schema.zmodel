@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+abstract model Base {
+  id String @id @default(cuid())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt() @map("updated_at")
+
+  @@deny('all', auth() == null || auth().disabled)
+}
+
+model Account extends Base {
+  email String @unique @email
+  name String? @length(min: 3, max: 255) @map("first_name")
+  disabled Boolean @default(false)
+
+  bookmarks Bookmark[]
+  tags Tag[]
+  categories Category[]
+
+  @@auth()
+
+  @@allow('read', auth() == this)
+  @@allow('create', false)
+  @@allow('update', auth() == this)
+  @@allow('delete', false)
+
+  @@map("accounts")
+}
+
+model Bookmark extends Base {
+  title String
+  url String
+  addedOn DateTime @default(now())
+
+  author Account @relation(fields: [authorId], references: [id])
+  authorId String
+
+  BookmarkWebsiteSeoData BookmarkWebsiteSeoData?
+  bookmarkWebsiteSeoDataId String?
+
+  tags BookmarkTag[]
+  categories Category[]
+
+  @@allow('read', auth() == author)
+  @@allow('create', auth() == author)
+  @@allow('update', auth() == author)
+  @@allow('delete', auth() == author)
+
+  @@map("bookmarks")
+}
+
+model BookmarkWebsiteSeoData extends Base {
+  title String?
+  description String?
+  image String?
+  url String?
+  bookmark Bookmark @relation(fields: [bookmarkId], references: [id])
+  bookmarkId String @unique
+
+  @@allow('read', auth() == bookmark.author)
+  @@allow('create', auth() == bookmark.author)
+  @@allow('update', auth() == bookmark.author)
+  @@allow('delete', auth() == bookmark.author)
+
+  @@map("bookmark_website_seo_data")
+}
+
+model BookmarkTag extends Base {
+  bookmark Bookmark @relation(fields: [bookmarkId], references: [id])
+  bookmarkId String
+  tag Tag @relation(fields: [tagId], references: [id])
+  tagId String
+
+  @@allow('read', auth() == bookmark.author)
+  @@allow('create', auth() == bookmark.author)
+  @@allow('update', auth() == bookmark.author)
+  @@allow('delete', auth() == bookmark.author)
+
+  @@map("bookmark_tags")
+}
+
+model Category extends Base {
+  name String @unique
+  bookmarks Bookmark[]
+  account Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  @@allow('read', auth() == account)
+  @@allow('create', auth() == account)
+  @@allow('update', auth() == account)
+  @@allow('delete', auth() == account)
+
+  @@map("categories")
+}
+
+model Tag extends Base {
+  name String @unique
+  bookmarks BookmarkTag[]
+  account Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  @@allow('read', auth() == account)
+  @@allow('create', auth() == account)
+  @@allow('update', auth() == account)
+  @@allow('delete', auth() == account)
+
+  @@map("tags")
+}
+
+
+plugin hooks {
+  provider = '@zenstackhq/swr'
+  output = "apps/imarkedit-app/src/app/services/api/hooks"
+}

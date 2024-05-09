@@ -26,6 +26,28 @@
         "production": {}
       }
     },
+    "prisma:gen": {
+      "executor": "@nx/js:node",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "defaultConfiguration": "production",
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/imarkedit-api",
+        "main": "apps/imarkedit-api/src/main.ts",
+        "tsConfig": "apps/imarkedit-api/tsconfig.app.json",
+        "assets": [
+          "apps/imarkedit-api/src/assets"
+        ],
+        "webpackConfig": "apps/imarkedit-api/webpack.config.js"
+      },
+      "configurations": {
+        "development": {},
+        "production": {}
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
