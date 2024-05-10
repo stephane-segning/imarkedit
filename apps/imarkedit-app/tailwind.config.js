@@ -8,10 +8,13 @@ module.exports = {
       __dirname,
       '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
-    ...createGlobPatternsForDependencies(__dirname),
+    ...createGlobPatternsForDependencies(__dirname)
   ],
   theme: {
-    extend: {},
+    extend: {}
   },
-  plugins: [require('@tailwindcss/forms')],
+  plugins: [
+    require('@tailwindcss/typography'),
+    require('@tailwindcss/forms')
+  ]
 };

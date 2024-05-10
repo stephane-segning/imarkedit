@@ -1,4 +1,4 @@
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
+import { defineConfig, externalizeDepsPlugin, swcPlugin } from 'electron-vite';
 import defaultConfig from './vite.config';
 
 export default defineConfig(async (env) => {
@@ -6,14 +6,14 @@ export default defineConfig(async (env) => {
   const isProduction = 'production' in env.mode.split('-');
   return {
     main: {
-      plugins: [externalizeDepsPlugin()],
+      plugins: [swcPlugin(), externalizeDepsPlugin()],
       build: {
         minify: isProduction,
         emptyOutDir: true,
         lib: {
-          entry: 'main/index.ts',
-        },
-      },
+          entry: 'main/index.ts'
+        }
+      }
     },
     preload: {
       plugins: [externalizeDepsPlugin()],
@@ -22,20 +22,25 @@ export default defineConfig(async (env) => {
         emptyOutDir: true,
         outDir: '../../dist/apps/imarkedit-app/electron/preload',
         lib: {
-          entry: 'preload/index.ts',
-        },
-      },
+          entry: 'preload/index.ts'
+        }
+      }
     },
     renderer: {
       ...rendererConfig,
+      plugins: [...rendererConfig.plugins],
       build: {
         ...rendererConfig.build,
         minify: isProduction,
         outDir: '../../dist/apps/imarkedit-app/electron/renderer',
         rollupOptions: {
+          ...rendererConfig.build.rollupOptions,
           input: 'index.html',
-        },
-      },
-    },
+          external: [
+            'react-use'
+          ]
+        }
+      }
+    }
   };
 });

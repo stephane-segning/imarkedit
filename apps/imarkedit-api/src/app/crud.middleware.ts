@@ -10,8 +10,7 @@ export class CrudMiddleware implements NestMiddleware {
   constructor(
     @Inject(ENHANCED_PRISMA)
     private readonly prismaService: PrismaService
-  ) {
-  }
+  ) { }
 
   public use(req: Request, _res: Response, next: (error?: any) => void) {
     // construct an Express middleware and forward the request/response

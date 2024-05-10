@@ -3,6 +3,21 @@
 @tailwind components;
 @tailwind utilities;
 
+.ce-code__textarea {
+  @apply bg-gray-800 text-white #{!important};
+}
+
+.editor-w-full {
+  .ce-block__content, .ce-toolbar__content {
+    max-width: calc(100% - 80px);
+  }
+
+  .cdx-block {
+    // max-width: 100% !important;
+    @apply max-w-full;
+  }
+}
+
 .nav-link-active {
   .icon {
     @apply text-white

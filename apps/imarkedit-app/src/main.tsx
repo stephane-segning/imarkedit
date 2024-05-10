@@ -6,6 +6,7 @@ import 'moment-timezone';
 import App from './app/app';
 import { StorageServiceProvider } from './app/services/storage/provider';
 import { SWRProvider } from './app/services/swr';
+import { AuthProvider } from './app/services/auth';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,11 +15,13 @@ const root = ReactDOM.createRoot(
 root.render(
   <StrictMode>
     <StorageServiceProvider>
-      <SWRProvider>
-        <HashRouter>
-          <App />
-        </HashRouter>
-      </SWRProvider>
+      <AuthProvider>
+        <SWRProvider>
+          <HashRouter>
+            <App />
+          </HashRouter>
+        </SWRProvider>
+      </AuthProvider>
     </StorageServiceProvider>
   </StrictMode>
 );

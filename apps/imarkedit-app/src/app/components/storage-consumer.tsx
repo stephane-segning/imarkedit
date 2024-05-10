@@ -4,10 +4,11 @@ import { useAsync } from 'react-use';
 export interface StorageConsumerProps<T> {
   storageKey: string;
   getKey: string;
+  defaultData?: T;
   children: (setValue: (t: T) => void, value?: T) => JSX.Element;
 }
 
-export function StorageConsumer<T>({ storageKey, getKey, children }: StorageConsumerProps<T>) {
+export function StorageConsumer<T>({ defaultData, storageKey, getKey, children }: StorageConsumerProps<T>) {
   const service = useStorageService<T>(storageKey);
   const { value, loading, error } = useAsync(() => service.get(getKey), [getKey]);
 
@@ -15,5 +16,5 @@ export function StorageConsumer<T>({ storageKey, getKey, children }: StorageCons
     return <div>Loading...</div>;
   }
 
-  return children((t: T) => service.set(getKey, t), value ?? undefined);
+  return children((t: T) => service.set(getKey, t), value ?? defaultData ?? undefined);
 }

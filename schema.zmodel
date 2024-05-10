@@ -19,10 +19,10 @@ abstract model Base {
 }
 
 model Account extends Base {
-  email      String     @unique @email
-  name       String?    @length(min: 3, max: 255) @map("first_name")
-  disabled   Boolean    @default(false)
+  name       String?      @length(min: 3, max: 255) @map("first_name")
+  disabled   Boolean      @default(false)
 
+  keys       AccountKey[]
   bookmarks  Bookmark[]
   tags       Tag[]
   categories Category[]
@@ -36,6 +36,24 @@ model Account extends Base {
   @@allow('delete', false)
 
   @@map("accounts")
+}
+
+model AccountKey extends Base {
+  kid       String
+  key       String  @unique
+  nonce     String?
+  algo      String?
+  type      String?
+
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  @@allow('read', auth() == account)
+  @@allow('create', auth() == account)
+  @@allow('update', auth() == account)
+  @@allow('delete', auth() == account)
+
+  @@map("account_keys")
 }
 
 model Bookmark extends Base {

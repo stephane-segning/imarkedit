@@ -44,7 +44,7 @@ export const EDITOR_JS_TOOLS = {
 
 interface EditorProps {
   data?: OutputData;
-  onChange: (data: any) => void;
+  onChange: (data: OutputData) => void;
   editorblock: string;
 }
 
@@ -79,7 +79,7 @@ const EditorFn = ensuredForwardRef<unknown, EditorProps>(({
     }
   });
 
-  return <div ref={extRef} id={editorblock} />;
+  return <article className="prose prose-neutral max-w-full" ref={extRef} id={editorblock} />;
 });
 
 export const Editor = memo(EditorFn);
