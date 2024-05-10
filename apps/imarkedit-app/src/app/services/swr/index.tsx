@@ -11,7 +11,14 @@ export const SWRProvider = ({ children }: any) => {
 
   return (
     <SWRConfig value={{ provider }}>
-      <Provider value={{ fetcher }}>{children}</Provider>
+      <Provider
+        children={children}
+        value={{
+          fetch: fetcher,
+          endpoint: 'http://localhost:3000/api/model',
+          logging: true
+        }}
+      />
     </SWRConfig>
   );
 };

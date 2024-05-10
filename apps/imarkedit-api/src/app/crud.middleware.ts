@@ -1,29 +1,25 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { enhance } from '@zenstackhq/runtime';
-import RESTHandler from '@zenstackhq/server/api/rest';
+import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
+import RPCHandler from '@zenstackhq/server/api/rpc';
 import { ZenStackMiddleware } from '@zenstackhq/server/express';
 import { Request, Response } from 'express';
 import { PrismaService } from './prisma.service';
+import { ENHANCED_PRISMA } from '@zenstackhq/server/nestjs';
 
 @Injectable()
 export class CrudMiddleware implements NestMiddleware {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(
+    @Inject(ENHANCED_PRISMA)
+    private readonly prismaService: PrismaService
+  ) {
+  }
 
-  use(req: Request, _res: Response, next: (error?: any) => void) {
-    // base url for RESTful resource linkage
-    const baseUrl = `${req.protocol}://${req.headers.host}${req.baseUrl}`;
-
-    // get the current user from request
-    const userId = req.headers['x-user-id'];
-    const userRole = req.headers['x-user-role'] ?? 'USER';
-    const user = userId ? { id: Number(userId), role: userRole } : undefined;
-
+  public use(req: Request, _res: Response, next: (error?: any) => void) {
     // construct an Express middleware and forward the request/response
     const inner = ZenStackMiddleware({
       // get an enhanced PrismaClient for the current user
-      getPrisma: () => enhance(this.prismaService, { user }),
-      // use RESTful style API
-      handler: RESTHandler({ endpoint: baseUrl }),
+      getPrisma: () => this.prismaService,
+      // use RPC style API
+      handler: RPCHandler()
     });
     inner(req, _res, next);
   }

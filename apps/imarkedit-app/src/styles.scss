@@ -2,3 +2,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.nav-link-active {
+  .icon {
+    @apply text-white
+  }
+
+  @apply bg-indigo-700 text-white
+}
+
+.nav-link-inactive {
+  .icon {
+    @apply text-indigo-200 group-hover:text-white
+  }
+
+  @apply text-indigo-200 hover:text-white hover:bg-indigo-700
+}
+
+.nav-link {
+  .icon {
+    @apply h-6 w-6 shrink-0;
+  }
+
+  @apply flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold;
+}
