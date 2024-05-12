@@ -8,6 +8,7 @@ import { useAuth } from './services/auth';
 import { AuthScreen } from './screens/auth.screen';
 import { LoginScreen } from './screens/login.screen';
 import { ConfirmRegistrationScreen } from './screens/confirm-registration.screen';
+import { SignOutScreen } from './screens/sign-out.screen';
 
 export function Router() {
   return (
@@ -28,15 +29,19 @@ export function Router() {
         </Route>
         <Route path="settings" element={<SettingsScreen />} />
       </Route>
-      <Route path="auth" element={(
-        <IsAuth>
-          <Outlet />
-        </IsAuth>
-      )}>
+      <Route
+        path="auth"
+        element={(
+          <IsAuth>
+            <Outlet />
+          </IsAuth>
+        )}
+      >
         <Route path="" element={<AuthScreen />} />
         <Route path="login" element={<LoginScreen />} />
         <Route path="confirm" element={<ConfirmRegistrationScreen />} />
       </Route>
+      <Route path="sign-out" element={<SignOutScreen />} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );

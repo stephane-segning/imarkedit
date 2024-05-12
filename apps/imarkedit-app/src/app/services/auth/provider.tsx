@@ -247,6 +247,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
     setToken(undefined);
     setOtp(undefined);
     setAccountId(undefined);
+    setAuthState(AuthState.Unauthenticated);
     await service.clear();
     await genKeyPair();
   };

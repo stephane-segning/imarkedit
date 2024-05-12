@@ -26,7 +26,7 @@ const navigation = [
 ];
 const userNavigation = [
   { name: 'Your profile', href: '/settings#profile' },
-  { name: 'Sign out', href: '#' },
+  { name: 'Sign out', href: '/sign-out' },
 ];
 
 export function Container() {

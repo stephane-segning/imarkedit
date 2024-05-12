@@ -18,7 +18,7 @@ export interface AuthContext {
   signup: (username: string) => Promise<void>;
   confirmSignup: (username: string, otp: string) => Promise<void>;
   registerDevice: (username: string, otp: string) => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 export const authContext = createContext<AuthContext | undefined>(undefined);
