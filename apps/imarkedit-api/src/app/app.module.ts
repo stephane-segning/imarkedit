@@ -13,18 +13,13 @@ import { CrudMiddleware } from './crud.middleware';
 import { AuthMiddleware } from './auth.middleware';
 import { createId } from '@paralleldrive/cuid2';
 import { AuthService } from './auth.service';
-import { PublicKeyStrategy } from './auth/public-key.strategy';
 import { AuthController } from './auth.controller';
-import { JwtModule } from '@nestjs/jwt';
-import { PassportModule } from '@nestjs/passport';
+import { OauthModelService } from './oauth-model.service';
+import OAuth2Server from 'oauth2-server';
+import { generatePublicKeyGrantType } from './public-key.granttype';
 
 @Module({
   imports: [
-    PassportModule,
-    JwtModule.register({
-      secret: 'jwtConstants.secret',
-      signOptions: { expiresIn: '60s' },
-    }),
     ClsModule.forRoot({
       global: true,
       middleware: {
@@ -57,7 +52,26 @@ import { PassportModule } from '@nestjs/passport';
     }),
   ],
   controllers: [AuthController],
-  providers: [PrismaService, AuthService, PublicKeyStrategy],
+  providers: [
+    PrismaService,
+    AuthService,
+    OauthModelService,
+    {
+      provide: OAuth2Server,
+      useFactory: (service: OauthModelService) =>
+        new OAuth2Server({
+          model: service,
+          extendedGrantTypes: {
+            'urn:public-key:grant-type': generatePublicKeyGrantType(service),
+          },
+          requireClientAuthentication: {
+            'urn:public-key:grant-type': false,
+            password: false,
+          },
+        }),
+      inject: [OauthModelService],
+    },
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

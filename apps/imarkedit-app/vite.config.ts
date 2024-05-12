@@ -61,6 +61,9 @@ export default defineConfig(({ mode }) => {
         transformMixedEsModules: true,
       },
       minify: environment === 'production',
+      rollupOptions: {
+        external: ['react-use'],
+      },
     },
 
     test: {

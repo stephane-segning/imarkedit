@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@imarkedit/lib/imarkedit-client": ["lib/imarkedit-client/src/index.ts"],
+      "@imarkedit/lib/imarkedit-crypto": ["lib/imarkedit-crypto/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

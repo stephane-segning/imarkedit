@@ -41,5 +41,7 @@ Thumbs.db
 .nx/cache
 
 hooks
+gen
 
 prisma
+!prisma/seed.ts

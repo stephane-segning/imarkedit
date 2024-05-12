@@ -1,7 +1,7 @@
 import { useOpenUrl } from '../services/openurl';
 import { useEffect } from 'react';
-import { useFindManyBookmark } from '../services/api/hooks';
 import { Navigation } from '../navigation';
+import { useFindManyBookmark } from '@imarkedit/lib/imarkedit-client';
 
 export function HomeScreen() {
   const open = useOpenUrl();

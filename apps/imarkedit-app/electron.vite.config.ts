@@ -11,9 +11,9 @@ export default defineConfig(async (env) => {
         minify: isProduction,
         emptyOutDir: true,
         lib: {
-          entry: 'main/index.ts'
-        }
-      }
+          entry: 'main/index.ts',
+        },
+      },
     },
     preload: {
       plugins: [externalizeDepsPlugin()],
@@ -22,9 +22,9 @@ export default defineConfig(async (env) => {
         emptyOutDir: true,
         outDir: '../../dist/apps/imarkedit-app/electron/preload',
         lib: {
-          entry: 'preload/index.ts'
-        }
-      }
+          entry: 'preload/index.ts',
+        },
+      },
     },
     renderer: {
       ...rendererConfig,
@@ -36,11 +36,8 @@ export default defineConfig(async (env) => {
         rollupOptions: {
           ...rendererConfig.build.rollupOptions,
           input: 'index.html',
-          external: [
-            'react-use'
-          ]
-        }
-      }
-    }
+        },
+      },
+    },
   };
 });

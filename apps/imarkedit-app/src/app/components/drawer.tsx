@@ -7,23 +7,26 @@ import {
   Cog6ToothIcon,
   DevicePhoneMobileIcon,
   PaperClipIcon,
-  XMarkIcon
+  XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import {
+  ChevronDownIcon,
+  MagnifyingGlassIcon,
+} from '@heroicons/react/20/solid';
 import { twMerge } from 'tailwind-merge';
 import { NavLink, Outlet } from 'react-router-dom';
 import { usePlatform } from '../services/platform';
-import { useFindManyNote } from '../services/api/hooks';
 import { DrawerLink } from './drawer-link';
 import { ListGroup } from './list';
+import { useFindManyNote } from '@imarkedit/lib/imarkedit-client';
 
 const navigation = [
   { name: 'Bookmarks', href: 'bookmarks', icon: BookmarkIcon, current: true },
-  { name: 'Notes', href: 'notes', icon: PaperClipIcon, current: false }
+  { name: 'Notes', href: 'notes', icon: PaperClipIcon, current: false },
 ];
 const userNavigation = [
   { name: 'Your profile', href: '/settings#profile' },
-  { name: 'Sign out', href: '#' }
+  { name: 'Sign out', href: '#' },
 ];
 
 export function Container() {
@@ -121,13 +124,19 @@ export function Container() {
                       <ListGroup className="mt-auto">
                         <li>
                           <DrawerLink to="/settings">
-                            <Cog6ToothIcon className="icon" aria-hidden="true" />
+                            <Cog6ToothIcon
+                              className="icon"
+                              aria-hidden="true"
+                            />
                             Settings
                           </DrawerLink>
                         </li>
                         <li>
                           <DrawerLink>
-                            <DevicePhoneMobileIcon className="icon" aria-hidden="true" />
+                            <DevicePhoneMobileIcon
+                              className="icon"
+                              aria-hidden="true"
+                            />
                             You're on {platform}
                           </DrawerLink>
                         </li>
@@ -184,20 +193,21 @@ export function Container() {
                 </li>
                 <li>
                   <DrawerLink>
-                    <DevicePhoneMobileIcon className="icon" aria-hidden="true" />
+                    <DevicePhoneMobileIcon
+                      className="icon"
+                      aria-hidden="true"
+                    />
                     You're on {platform}
                   </DrawerLink>
                 </li>
               </ListGroup>
-
             </ul>
           </nav>
         </div>
       </div>
 
       <div className="md:pl-72">
-        <div
-          className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 md:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 md:px-8">
           <button
             type="button"
             className="-m-2.5 p-2.5 text-gray-700 md:hidden"
@@ -276,8 +286,7 @@ export function Container() {
                   leaveFrom="transform opacity-100 scale-100"
                   leaveTo="transform opacity-0 scale-95"
                 >
-                  <Menu.Items
-                    className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
+                  <Menu.Items className="absolute right-0 z-10 mt-2.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none">
                     {userNavigation.map((item) => (
                       <Menu.Item key={item.name}>
                         {({ active }) => (

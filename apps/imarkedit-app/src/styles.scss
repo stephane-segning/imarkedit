@@ -3,6 +3,16 @@
 @tailwind components;
 @tailwind utilities;
 
+.label-error {
+  input {
+    @apply input-error;
+  }
+
+  div[role="alert"] {
+    @apply text-error block;
+  }
+}
+
 .ce-code__textarea {
   @apply bg-gray-800 text-white #{!important};
 }

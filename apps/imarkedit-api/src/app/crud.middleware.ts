@@ -1,4 +1,4 @@
-import { Inject, Injectable, NestMiddleware } from '@nestjs/common';
+import { Inject, Injectable, Logger, NestMiddleware } from '@nestjs/common';
 import RPCHandler from '@zenstackhq/server/api/rpc';
 import { ZenStackMiddleware } from '@zenstackhq/server/express';
 import { Request, Response } from 'express';
@@ -7,6 +7,7 @@ import { ENHANCED_PRISMA } from '@zenstackhq/server/nestjs';
 
 @Injectable()
 export class CrudMiddleware implements NestMiddleware {
+  private readonly logger = new Logger(CrudMiddleware.name);
   constructor(
     @Inject(ENHANCED_PRISMA)
     private readonly prismaService: PrismaService
@@ -18,7 +19,8 @@ export class CrudMiddleware implements NestMiddleware {
       // get an enhanced PrismaClient for the current user
       getPrisma: () => this.prismaService,
       // use RPC style API
-      handler: RPCHandler()
+      handler: RPCHandler(),
+      logger: this.logger,
     });
     inner(req, _res, next);
   }

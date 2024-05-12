@@ -1,12 +1,13 @@
 import { useSwrProvider } from './provider';
 import { Provider } from '@zenstackhq/swr/runtime';
 import { SWRConfig } from 'swr';
+import { LoadingScreen } from '../../screens/loading.screen';
 
 export const SWRProvider = ({ children }: any) => {
   const { provider, fetcher } = useSwrProvider();
 
   if (!provider) {
-    return <div>Initializing cache…</div>;
+    return <LoadingScreen />;
   }
 
   return (

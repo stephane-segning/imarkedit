@@ -1,11 +1,24 @@
 import { createContext } from 'react';
+import { AppToken } from '@imarkedit/lib/imarkedit-crypto';
+
+export enum AuthState {
+  Unauthenticated = 'Unauthenticated',
+  Authenticated = 'Authenticated',
+  RegisteredDevice = 'RegisteredDevice',
+  SignedUp = 'SignedUp',
+}
 
 export interface AuthContext {
+  state: AuthState;
   accountId?: string;
-  login: (kid: string, accountId: string) => void;
-  register: (kid: string, publicKey: string) => void;
+  username?: string;
+  otp_data?: string;
+  token?: AppToken;
+  login: () => Promise<void>;
+  signup: (username: string) => Promise<void>;
+  confirmSignup: (username: string, otp: string) => Promise<void>;
+  registerDevice: (username: string, otp: string) => Promise<void>;
   logout: () => void;
-  ready: boolean;
 }
 
 export const authContext = createContext<AuthContext | undefined>(undefined);

@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -19,14 +19,17 @@ abstract model Base {
 }
 
 model Account extends Base {
-  name       String?      @length(min: 3, max: 255) @map("first_name")
-  disabled   Boolean      @default(false)
+  username     String        @unique
+  name         String?       @length(min: 3, max: 255) @map("full_name")
+  disabled     Boolean       @default(true)
 
-  keys       AccountKey[]
-  bookmarks  Bookmark[]
-  tags       Tag[]
-  categories Category[]
-  notes      Note[]
+  tokens       OAuth2Token[]
+  toptAccounts ToptAccount[]
+  keys         AccountKey[]
+  bookmarks    Bookmark[]
+  tags         Tag[]
+  categories   Category[]
+  notes        Note[]
 
   @@auth()
 
@@ -38,10 +41,24 @@ model Account extends Base {
   @@map("accounts")
 }
 
+model ToptAccount extends Base {
+  secret    String  @unique
+  enabled   Boolean @default(true)
+
+  account   Account @relation(fields: [accountId], references: [id])
+  accountId String
+
+  @@allow('read', false)
+  @@allow('create', false)
+  @@allow('update', false)
+  @@allow('delete', false)
+
+  @@map("account_topts")
+}
+
 model AccountKey extends Base {
   kid       String
   key       String  @unique
-  nonce     String?
   algo      String?
   type      String?
 
@@ -49,8 +66,8 @@ model AccountKey extends Base {
   accountId String
 
   @@allow('read', auth() == account)
-  @@allow('create', auth() == account)
-  @@allow('update', auth() == account)
+  @@allow('create', false)
+  @@allow('update', false)
   @@allow('delete', auth() == account)
 
   @@map("account_keys")
@@ -143,8 +160,59 @@ model Tag extends Base {
   @@map("tags")
 }
 
+model OAuth2Client extends Base {
+  secret               String?
+  redirectUris         String[]
+  grants               String[]
+  scopes               String[]
+  name                 String
+  accessTokenLifetime  Int
+  refreshTokenLifetime Int
+  description          String?
+  disabled             Boolean       @default(false)
+  tokens               OAuth2Token[]
+
+  @@allow('read', false)
+  @@allow('create', false)
+  @@allow('update', false)
+  @@allow('delete', false)
+
+  @@map("oauth2_clients")
+}
+
+model OAuth2Token extends Base {
+  accessToken           String       @unique
+  accessTokenExpiresAt  Int
+  refreshToken          String?      @unique
+  refreshTokenExpiresAt Int?
+  scope                 String[]
+  client                OAuth2Client @relation(fields: [clientId], references: [id])
+  clientId              String
+  account               Account      @relation(fields: [accountId], references: [id])
+  accountId             String
+
+  @@allow('read', false)
+  @@allow('create', false)
+  @@allow('update', false)
+  @@allow('delete', false)
+
+  @@map("oauth2_tokens")
+}
+
+model OAuth2Key extends Base {
+  publicData  Json?
+  privateData Json?
+  enabled     Boolean @default(true)
+
+  @@allow('read', false)
+  @@allow('create', false)
+  @@allow('update', false)
+  @@allow('delete', false)
+
+  @@map("oauth2_keys")
+}
 
 plugin hooks {
   provider = '@zenstackhq/swr'
-  output = "apps/imarkedit-app/src/app/services/api/hooks"
+  output = "lib/imarkedit-client/src/lib/gen/hooks"
 }
