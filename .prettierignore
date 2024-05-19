@@ -3,3 +3,6 @@
 /coverage
 /.nx/cache
 gen
+
+pnpm-lock.yaml
+node_modules
